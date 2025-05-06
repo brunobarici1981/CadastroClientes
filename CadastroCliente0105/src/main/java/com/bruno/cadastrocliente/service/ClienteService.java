@@ -3,9 +3,11 @@ package com.bruno.cadastrocliente.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruno.cadastrocliente.Entity.CepDTO;
 import com.bruno.cadastrocliente.Entity.Cliente;
 import com.bruno.cadastrocliente.repository.ClienteRepository;
 
@@ -14,15 +16,30 @@ public class ClienteService {
 
 	@Autowired
 	ClienteRepository repository;
-
+    @Autowired
+    BuscaCepCliente buscaCepCliente;
 	public List<Cliente> buscarClientes() {
 
 		return repository.findAll();
 	}
 
-	public Cliente cadastrarCliente(Cliente cliente) {
-		return repository.save(cliente);
-	}
+	 public Cliente cadastrarCliente(Cliente clienteDto) {
+	        CepDTO cepDTO = buscaCepCliente.buscarCepCliente(clienteDto.getCepCliente());
+	        CepDTO cep = new CepDTO();
+
+	       
+	        BeanUtils.copyProperties(cepDTO, cep); 
+
+	        Cliente cliente = new Cliente();
+	        cliente.setNome(clienteDto.getNome());
+	        cliente.setCpf(clienteDto.getCpf());
+	        cliente.setTelefone(clienteDto.getTelefone());
+	        cliente.setCepCliente(cep.getCep());
+	        cliente.setCep(cep);
+	        
+	     
+	        return repository.save(cliente);
+	    }
 
 	public Optional<Cliente> buscarClientePorId(long id) {
 

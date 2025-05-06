@@ -4,15 +4,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.bruno.cadastrocliente.Entity.Cep;
+import com.bruno.cadastrocliente.Entity.CepDTO;
 
 @Service
 public class BuscaCepCliente {
-	
-	public Cep buscarCep(String cep) {
-		String urlCep = "http://viacep.com.br/ws/" + cep + "/json/";
+
+
+	public CepDTO buscarCepCliente(String cepStr) {
+		String urlCep = "http://viacep.com.br/ws/" + cepStr + "/json/";
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<Cep> resp = restTemplate.getForEntity(urlCep, Cep.class);
+		ResponseEntity<CepDTO> resp = restTemplate.getForEntity(urlCep, CepDTO.class);	
 		return resp.getBody();
 	}
+
+	
 }
